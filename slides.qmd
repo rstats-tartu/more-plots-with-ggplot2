@@ -1,0 +1,191 @@
+---
+title: "Preparing ggplot2 plots"
+author: Taavi Päll
+date: "2023-10-18"
+format: revealjs
+code-annotations: below
+---
+
+```{r, include=FALSE}
+library(tidyverse)
+library(here)
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Introduction
+
+Making a good statistical graph is difficult and usually takes many iterations, where we progressively improve different aspects of our plot: 
+
+- scale,         
+- transformation of a variable,     
+- addition of information,     
+- color palette,     
+- markers, etc.    
+
+## Three guiding principles to good graphs {.smaller}
+
+1. Make the data stand out: 
+    - fill data region, transform, choose an appropriate scale for an axis, avoid chart junk, avoid having graph elements interfering with data, deal with overplotting (jittering, transparency)
+
+2. Facilitate comparison:
+    - what is the important comparison and how to emphasize it -- different groups, bring out points, add reference markers, juxtapose and superpose groups, color palettes and color blindness
+
+3. Add information by labeling axes and using labels, annotating points/lines
+
+
+## Composing a ggplot 
+
+Probably, you already know how to create a ggplot2 plot. Here is just a remainder that ggplot2 plot is composed layer-by-layer
+
++ **ggplot2 works iteratively** -- you start with a layer showing the raw data and then add layers of geoms, annotations, and statistical summaries.
+
+## To compose plots, you have to supply minimally
+
++ **Data** that you want to visualize and 
++ **aes**thetic **mappings** -- what's on x-axis, what's on y-axis, and how to you want to group and color your data. Mapped arguments must be found in your data!
++ **Layers** made up of **geom**etric elements: points, lines, boxes, etc. What's shown on plot.
+
+Visualisation of these three components within ggplot context generally looks like this:
+
+```r
+ggplot(data = <DATA>) +
+  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
+```
+
+
+## Let's try to recreate a plot 
+
+```{r, echo=FALSE, fig.cap="SARS-CoV-2 clade prevalence in Estonia"}
+include_graphics(here("plots/Fig_3.png"))
+```
+
+
+## Plot data {.smaller}
+
+Genotyped COVID-19-positive samples:  
+- lineage and clade determined from full genome sequences      
+- we have sample date    
+
+```{r}
+library(tidyverse)
+library(here) # here() uses a reasonable heuristics to find your project's files, based on the current working directory at the time when the package is loaded.
+(korogeno <- read_csv(here("data/korogeno.csv")))
+```
+
+## What we see?
+
+::: {.incremental}
+- It's a bar plot displaying *weekly* prevalence of SARS-CoV-2 clades (A) or VOCs -- "variant of concern" (B). 
+  - Do we have all variables present in data?
+      - missing "year and week" variable
+      - missing VOC
+  - What geom to use?
+      - geom_bar()
+  - How to you transform counts to proportions?
+      - geom_bar(position = "fill")
+:::
+
+
+## VOCs
+
+Variants are categorised as a Variant of concern (VOC) if there is clear evidence that the variant will have/is having a marked impact on the epidemiological situation in a population. 
+
+This is likely to occur because the variant is more transmissable, causes more severe disease, and/or has a more detrimental effect on host immunity. Source: https://www.pathogens.se/pathogens/voc/
+
+## VOCs ...
+
+::: {.incremental}
+- VOC designation is present in **clade** names
+    - We have three VOCs that were epidemiologically important in Estonia -- Alpha, Delta, Omicron
+    - We have "minor" VOCs that did not take off -- "Other VOCs"
+    - We have non-VOCs -- "Other"
+- How do we create new varable 
+     - We can use a combination of `case_when` function and `str_detect` function from **tidyverse**
+
+:::
+
+## Year and month 
+
+Year and week variable can be created with package **tsibble**
+```{r}
+library(tsibble)
+yearweek("2023-10-18")
+```
+
+**tsibble** provides also axis formatting function to display year and month (changing the scale on x-axis)
+```{r}
+?scale_x_yearmonth
+?scale_x_date # for a full set of parameters
+```
+
+
+## Formatting x-axis labels
+
+In order to format x-axis labels one can use `strftime` command:
+```{r}
+strftime("2023-10-18", "%Y W%W (%b)") 
+```
+
+OR
+
+```{r}
+yw <- yearweek("2023-10-18")
+strftime(yw, "%Y W%W (%b)") 
+```
+
+`"%Y W%W (%b)"` -- to display four digit year (%Y) and week of the year (%W) prefixed with literal 'W' and actual month abbreviation (%b) in brackets
+
+
+
+## Adding more information/annotations to plot
+
+::: {.incremental}
+- There is another layer added to panel A, showing waves based on most prevalent clade. What geoms this layer consists of?
+    - geom_segment 
+    - geom_text
+- Waves are defined by 50% prevalence threshold 
+    - Is this information present in our dataset?
+    - How we can summarise our dataset, first, to obtain prevalence and, second, to obtain start and end dates of waves
+:::
+
+
+
+## Formatting axes and legends
+
+*Themes are a powerful way to customize the non-data components of your plots: i.e. titles, labels, fonts, background, gridlines, and legends.* (From: `theme {ggplot2}`)
+
+Let's say you want to change angle of x-axis labels:
+```{r, eval=FALSE}
+p + theme(axis.text.x = element_text(angle = 90))
+```
+
+`hjust` and `vjust` arguments inside `element_text` can be used to adjust/fix axis-label placement relative to tick marks.
+
+To make some element disappear:
+```{r, eval=FALSE}
+p + theme(axis.title.x = element_blank())
+```
+
+
+
+## Composing figure
+
+- Complex figures with multiple panels can be composed using **patchwork** package
+
+```{r}
+library(patchwork) # install.packages("patchwork") if missing
+
+p1 <- ggplot(mtcars) + geom_point(aes(mpg, disp))
+p2 <- ggplot(mtcars) + geom_boxplot(aes(gear, disp, group = gear))
+
+p1 + p2 + plot_annotation(tag_levels = "A")
+```
+
+
+
+## Let's start!
+
+
+
