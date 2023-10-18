@@ -55,11 +55,59 @@ ggplot(data = <DATA>) +
 ```
 
 
+
 ## Let's try to recreate a plot 
 
 ```{r, echo=FALSE, fig.cap="SARS-CoV-2 clade prevalence in Estonia"}
 include_graphics(here("plots/Fig_3.png"))
 ```
+
+
+# First, little background
+
+ 
+**SARS-CoV-2 clade dynamics and their associations with hospitalization during the first two years of the COVID-19 pandemic**
+
+Taavi Päll1*, Aare Abroi2*, Radko Avi1, Heiki Niglas3, Arina Shablinskaja1, Merit Pauskar1, Ene-Ly Jõgeda1, Hiie Soeorg1, Eveli Kallas1, Andrio Lahesaare4, Kai Truusalu1, Dagmar Hoidmets1, Olga Sadikova3, Kaspar Ratnik4, Hanna Sepp3, Liidia Dotsenko3, Jevgenia Epštein3, Heleene Suija3, Katrin Kaarna5,9, Steven Smit6, Lili Milani6, Mait Metspalu6, Ott Eric Oopkaup7, Ivar Koppel7, Erik Jaaniso8, Ivan Kuzmin7, Heleri Inno7, Uku Raudvere7, Mari-Anne Härma3, Paul Naaber1,4, Tuuli Reisberg6, Hedi Peterson8, Ulvi Gerst Talas7, Irja Lutsar1, Kristi Huik1
+
+
+## Testing and sequencing of SARS-CoV-2 in Estonia {.smaller}
+
+```{r, echo=FALSE, fig.cap="Testing and sequencing of SARS-CoV-2 in Estonia. Bars show the number of tests performed (left axis) and the line denotes the percentage of positive samples sequenced (right axis). Vertical lines denote the duration of waves, defined by the prevalence of Nextstrain clade(s). The wave start and end were defined as a week when the lower or upper bound, respectively, of the 95% confidence interval of clade prevalence, obtained by the Clopper-Pearson method, crossed the 50% threshold."}
+include_graphics(here("plots/Fig_2.png"))
+```
+
+
+## Waves of SARS-CoV-2 in Estonia
+
+```{r, echo=FALSE, fig.cap="A, the prevalence of Nextstrain clades. B, the prevalence of VOCs. Full-length sequencing was not applied to samples collected between W47 to W52 2020."}
+include_graphics(here("plots/Fig_3.png"))
+```
+
+
+## Diversity of SARS-CoV-2 lineages in domestic and travel-related cases in Estonia
+
+
+```{r, echo=FALSE, fig.cap="A, Shannon diversity index. Points denote individual weekly observations. The line denotes the autoregressive model fitted to data and the shaded ribbon denotes a 95% credible interval, N = 14,341. B, the effect size of the Shannon index, imported cases compared to domestic cases. The line denotes the effect size derived from the model fit shown in panel A and the shaded ribbon denotes a 95% credible interval. "}
+include_graphics(here("plots/Fig_4.png"))
+```
+
+
+## Hospitalization of SARS-CoV-2 positive individuals in Estonia
+
+```{r, echo=FALSE, fig.cap="A, probability of hospitalization is associated with vaccination status, age, and clade. Posterior summaries of the conditional effect of the clade, vaccination status, and age in logistic regression adjusted for sex, number of weekly cases, and population vaccination coverage, N = 23,456. B, log odds ratio of hospitalization in vaccinated compared with unvaccinated SARS-CoV-2 positive individuals. C, log odds ratio of hospitalization of unvaccinated SARS-CoV-2 positive individuals infected with Omicron 21K (upper panels) or 21L (lower panels) compared with individuals infected with other common SARS-CoV-2 clades. Line denotes the model’s best estimate and the ribbon denotes a 95% credible interval. The solid line denotes the span of ages observed for each clade, dashed line denotes unobserved ages implied by the underlying model. The dotted line denotes log odds = 0."}
+include_graphics(here("plots/Fig_5.png"))
+```
+
+
+## Conclusions
+
+We characterized the circulating variants in Estonia from March 2020 to March 2022 by genotyping about 7% of SARS-CoV-2-positive samples.     
+
+1. the prevalence of the clades in Estonia resembled other European countries,      
+2. different VOC waves varied in diversity with the highest diversity seen in the Delta wave and the lowest in the Alpha wave, 
+3. the probability of hospitalization was associated with clade as two Omicron clades (21K and 21L) displayed lower hospitalization compared to all other common clades,        
+4. the protective effect of the vaccination against severe disease, associated with hospitalization, was seen from age 40 years onwards and the effect increased with age. 
 
 
 ## Plot data {.smaller}
